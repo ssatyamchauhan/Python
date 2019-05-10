@@ -1,16 +1,22 @@
+# Importing request// Requests is a Python module that you can use to send all kinds of HTTP requests.
 import requests
+# Import pprint for pretty look of dictionary.
+from pprint import pprint
+# imports BeautifulSoup // Beautiful Soup is a Python library for pulling data out of HTML and XML files. 
+from bs4 import BeautifulSoup 
 
-from bs4 import BeautifulSoup 	
+# function to scrap top 250 listed Indian movies on imdb.
 def scrap_top_list():
+	# http request on the link where top 250listed indian movies. 
 	r=requests.get("https://www.imdb.com/india/top-rated-indian-movies/?ref_=nv_mv_250_in")
 
+	# getting text of requested data
 	page=r.text
+	# Here I am parsing html content in text
 	parse=BeautifulSoup(page,"html.parser")
-	# heading=parse.find("h1").text
-	# print (heading)
-	# title=parse.find("title").text
-	# print(title)
+	# lister is the class of main div in which a tbody .
 	lister=parse.find("div",class_="lister")
+	# tbody is a html tag in there are many td in each tr there is h tag and td tags under which there is movie name.
 	tbody=lister.find("tbody",class_="lister-list")
 	j=1
 	movie_rank=[]
@@ -19,34 +25,31 @@ def scrap_top_list():
 	movie_rating=[]
 	movie_link=[]
 	Dictionary_list=[]
+	# here i am find all tr tag in each tr we have anchor tag , span tag and td tag from here we scraped the data.
 	trs=tbody.find_all("tr")
+	# Using loop I am going inside in each tr
 	for tr in trs:
+		# In each tr i am finding td ,span and anchor tag where i am getting movie_name,year,rating,,movie_link respectively
 		td=tr.find("td", class_="titleColumn")
+		# appending movie_rank data in list named movie_rank
 		movie_rank.append(j)
 		name=td.find("a").text
+		# appending movie_name data in list named movie_name
 		movie_name.append(name)
 		year=td.find("span").text
+		# appending movie_year data in list named movie_year
 		movie_year.append(year)
 		rating=tr.find("td",class_="ratingColumn imdbRating").text.strip()
+		# appending movie_rating data in list named movie_rating
 		movie_rating.append(rating)
 		link=tr.find("td", class_="titleColumn").a["href"]
 		main_link="http://www.imdb.com"+link
+		# appending movie_link data in list named movie_link
 		movie_link.append(main_link)
 		j+=1
-		# print (a),
-		# print (j)
-		
-		# print (td)
-		# print (td)
-		# print (td)
-		# print ("....................................................................")
-		# for i in td:
-		# 	if '.' not in i:
-					
-			# else:
-			# 	j+=1
-			# 	break
+	# here i using loop on lists that we have made recently and appended data 
 	for i in range(250):
+		# now append all details of one movie in a dictionary
 		dic={
 	    "name": movie_name[i],
 	    "year": movie_year[i],
@@ -54,6 +57,7 @@ def scrap_top_list():
 	    "rating": movie_rating[i],
 	    "url": movie_link[i]
 	  }
+	  # appending dictionary in Dictionary_list
 		Dictionary_list.append(dic)
 	return Dictionary_list
 	# print(Dictionary_list)
@@ -64,15 +68,21 @@ def scrap_top_list():
 	# print (movie_link)
 
 ################----------------------Task2------------------##################################
+# In task 2 I have listed all movies with their year in one dictionary.
 
 	# Task2={}
+	# # using loop on movie_year there are unique year in which atleast one movie is released
 	# for j in movie_year:
 	# 	list_task2=[]
+	# # using loop on 250 movie ;
 	# 	for k in range(250):
+	# # checking that which movie is released in which year
 	# 		if j==Dictionary_list[k]["year"]:
 	# 			dic2={"name":Dictionary_list[k]["name"],"year":j,"position":Dictionary_list[k]["position"],"rating":Dictionary_list[k]["rating"],"url":Dictionary_list[k]["url"]}
+	# 			# append the same year movie in a list
 	# 			list_task2.append(dic2)
+	# 	# append the list as a value and year as key 
 	# 	Task2[j] = list_task2
-	# print (Task2)
-scrap_top_list()
+	# pprint (Task2)
 
+pprint(scrap_top_list())
