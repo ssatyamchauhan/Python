@@ -9,9 +9,12 @@ if exists:
 else:
 	r=requests.get("http://saral.navgurukul.org/api/courses")
 	a=r.text
-	with open("files.json","w") as f:
-		f.write(a)
+	with open("files.json","w+") as f:
 		var=json.loads(a)
+		f.write(json.dumps(var, sort_keys=True, indent=4))
+		var=json.loads(a)
+
+
 def list_of_courses():
 	j=0
 	for i in var["availableCourses"]:
@@ -19,35 +22,6 @@ def list_of_courses():
 		# print i["name"]
 		j+=1
 	list_of_Exercises()
-		# r=requests.get("http://saral.navgurukul.org/api/courses/"+str(i["id"])+"/exercises")
-		# a=r.text
-		# d=json.loads(a)
-		# e=d["data"]
-		# n=0
-		# k=1
-		# for s in e:
-		# 	print s["name"]
-		# 	if n!=len(e):
-		# 		print s["name"]
-		# 		f=e[n]
-		# 		if f==[]:
-		# 			print "    "
-		# 		else:
-		# 			print k,"        ",f["slug"]
-		# 			print "   "
-		# 			k+=1
-		# 		n=n+1
-
-				
-			# for k in f:
-# 				# if k==[]:
-# 				# 	continue
-# 				# else:
-# 				# 	print "        "+f[0]["slug"]
-			
-
-			
-	# 	break
 def list_of_Exercises():
 	j=0
 	user=input("enter your input")
@@ -98,14 +72,3 @@ def list_of_Exercises():
 
 		j=j+1
 list_of_courses()
-# print (type(j)) ##python2:Nonetype python3:int 
-# print (type(n))	##python2:str python3:str
-# print (type(a))	##python2:unicode python3:str
-# with open("files.json") as f:O
-# 	a=json.load(f)
-# i=open("filess.py", "w")
-# i.write(a)
-# i=open("filess.py")
-# j=i.read()
-# print j
-# print (type(j))
